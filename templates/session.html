@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+<h1>Create Session</h1>
+<form action="">
+    <h1>You are Agent Spider: </h1>
+    <img src="{{ url_for('static', filename='Spider.PNG') }}" alt="">
+    <h2>Select Your Equipment</h2>
+<select name="" id="">
+    <option value="">Stealth Field
+        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
+    </option>
+    <option value="">Adrenaline Surge</option>
+    <option value="">Flash Bang</option>
+    <option value="">Smoke Grenade</option>
+</select>
+<select name="" id="">
+    <option value="">Stealth Field
+        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
+    </option>
+    <option value="">Adrenaline Surge</option>
+    <option value="">Flash Bang</option>
+    <option value="">Smoke Grenade</option>
+</select>
+<select name="Equipment 1" id="" placeholder="Equipment1">
+    <option value="">Stealth Field
+        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
+    </option>
+    <option value="">Adrenaline Surge</option>
+    <option value="">Flash Bang</option>
+    <option value="">Smoke Grenade</option>
+</select>
+</form>
+
+{% for image in images %}
+<img src="/static/image/{{image}}.PNG" alt="" hidden id="{{image}}">
+{% endfor %}
+<script>
+    const minCeiled = Math.ceil(1);
+    const maxFloored = Math.floor(6);
+    let die = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+    document.getElementById(die).hidden=false;
+  </script>
+
+</div>
+{% endblock %}
