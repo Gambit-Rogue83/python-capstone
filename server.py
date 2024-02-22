@@ -1,12 +1,10 @@
 import os
+import crud
 from flask import Flask, render_template, request, flash, abort, redirect, url_for, session
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
-# from flask_migrate import Migrate
-from flask_login import login_user, login_required, logout_user
-from forms import GamerTag, LoginForm
-from model import User, db
+# from flask_wtf import FlaskForm
+# from wtforms import StringField, SubmitField
+# from wtforms.validators import DataRequired
+import model
 
 app = Flask(__name__)
 
@@ -14,37 +12,42 @@ app.config['SECRET_KEY'] = 'IAmIRONMAN'
 
 @app.route('/', methods=['GET', 'POST'])
 def register():
+    # form = GamerTag()
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = request.form.get('username')
+        password = request.form.get('password')
+        if crud.create_user(email, user, password):
+            session['user'] = user
 
-    form = GamerTag()
-    if form.validate_on_submit():
-        user = User(email=form.email.data, username=form.username.data, password=form.password.data)
-
-        db.session.add(user)
-        db.session.commit()
-        flash(f"{user.username}, let the games begin!")
-        return redirect(url_for('login'))
-    return render_template('register.html', form=form)
+            return redirect('session')
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     flash(f"{user.username}, let the games begin!")
+    #     return redirect(url_for('login'))
+    return render_template('register.html')
 
 
 @app.route('/session')  #/welcome
-@login_required
 def new_game(): #welcome_user:
+
+    if not session.get('user'):
+        return redirect('/login')
 
 
     return render_template('session.html') #welcome_user.html
 
 @app.route('/logout')
-@login_required
 def logout():
-    logout_user()
+    # logout_user()
     flash("Logged out successfully")
     return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    form = LoginForm()
-    if form.validate_on_submit():
+    # form = LoginForm()
+    # if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user.check_password(form.password.data) and user is not None:
@@ -60,7 +63,6 @@ def login():
 
 
 @app.route('/game')
-@login_required
 def game():
 
     game_spaces = []
@@ -79,4 +81,5 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == "__main__":
-    app.run(debug =True)
+    model.connect_to_db(app)
+    app.run(debug = True)

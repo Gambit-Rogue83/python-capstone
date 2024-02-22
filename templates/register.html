@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Register</h1>
-    <form method="post">
-        {{form.hidden_tag()}}
-        {{form.email.label}}{{form.email()}}<br>
-        {{form.username.label}}{{form.username()}}<br>
-        {{form.password.label}}{{form.password()}}<br>
-        {{form.pass_confirm.label}}{{form.pass_confirm()}}<br>
-        {{form.submit()}}
+    <form action="/" method="POST">
+        <label for="email">Email</label><input type="email" name="email" id="email">
+        <label for="username">Username</label><input id="username" type="text" name="username">
+        <label for="password">Password</label><input id="password" type="text" name="password">
+        <label for="submit"></label><input id="submit" type="submit" name="submit">
     </form>
 {% endblock %}
