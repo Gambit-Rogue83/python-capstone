@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        #cover {
+            background-image: url('specter.jpg');
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -9,9 +14,12 @@
     <link rel="stylesheet" href="/static/game.css">
 </head>
 <body>
+    {% for message in get_flashed_messages() %}
+    {{ message }}
+    {% endfor %}
 
     <ul class="nav">
-        <li class="nav-link"><a href="{{ url_for('logout') }}">Logout</a></li>
+        <li class="nav-link"><a href="https://media.plaidhatgames.com/old_images/games/specter-ops-shadow-of-babel/rules.pdf">Rulebook</a></li>
         <li class="nav-link"><a href="{{ url_for('login') }}">Login</a></li>
     </ul>
     {% block content %}

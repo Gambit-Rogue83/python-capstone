@@ -1,10 +1,8 @@
 import os
 import crud
-from flask import Flask, render_template, request, flash, abort, redirect, url_for, session
-# from flask_wtf import FlaskForm
-# from wtforms import StringField, SubmitField
-# from wtforms.validators import DataRequired
+from flask import Flask, render_template, request, flash, abort, redirect, url_for, session, jsonify
 import model
+import logic
 
 app = Flask(__name__)
 
@@ -12,59 +10,56 @@ app.config['SECRET_KEY'] = 'IAmIRONMAN'
 
 @app.route('/', methods=['GET', 'POST'])
 def register():
-    # form = GamerTag()
     if request.method == 'POST':
         email = request.form.get('email')
         user = request.form.get('username')
         password = request.form.get('password')
         if crud.create_user(email, user, password):
             session['user'] = user
-
+            print(session)
             return redirect('session')
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     flash(f"{user.username}, let the games begin!")
-    #     return redirect(url_for('login'))
+        else:
+            flash('Account already exists')
+            return redirect('login')
+
     return render_template('register.html')
-
-
-@app.route('/session')  #/welcome
-def new_game(): #welcome_user:
-
-    if not session.get('user'):
-        return redirect('/login')
-
-
-    return render_template('session.html') #welcome_user.html
-
-@app.route('/logout')
-def logout():
-    # logout_user()
-    flash("Logged out successfully")
-    return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        user = request.form.get('username')
+        password = request.form.get('password')
+        if crud.verify_user(user, password):
+            session['user'] = user
+            flash(f"Welcome back {user}")
+            return redirect('session')
+        else:
+            flash('The email or password you provided does not exist, please try again!')
+            return redirect('login')
+    return render_template('login.html')
 
-    # form = LoginForm()
-    # if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+@app.route('/logout')
+def logout():
+    flash("Logged out successfully")
+    return redirect(url_for('login'))
 
-        if user.check_password(form.password.data) and user is not None:
-            login_user(user)
-            flash(f"Welcome back {user.username}")
-
-            next = request.args.get('next')
-            if next == None or not next[0]=='/':
-                next = url_for('session')
-
-            return redirect(next)
-    return render_template('login.html', form=form)
+@app.route('/session', methods=['GET', 'POST'])
+def new_game():
+    if session.get('user'):
+        return render_template('session.html')
 
 
-@app.route('/game')
+    return redirect('login')
+
+@app.route('/game', methods=['GET', 'POST'])
 def game():
+    if not session.get('user'):
+        return redirect('/login')
 
+    if not session.get('game.id'):
+        session['game.id']  = crud.create_game(session['user'])
+
+    print(session)
     game_spaces = []
     game_letters = 'ABCDEFGHIJKLMNOPQRSTUVW'
     game_numbers = list(range(1,33))
@@ -74,7 +69,24 @@ def game():
         for letter in game_letters:
             list1.append(letter + str(num))
         game_spaces.append(list1)
+
     return render_template('game.html', game_spaces=game_spaces)
+
+@app.route('/game-update', methods=['POST'])
+def game_update():
+    round_number = 1
+    agentField = request.json.get("agentField")
+    agentDetected = request.json.get("agentDetected")
+    taskCompleted =request.json.get('taskCompleted')
+    team_moves = logic.opponent(agentField, agentDetected, taskCompleted)
+
+    with app.app_context():
+        movement = model.Move(game_id=session['game.id'], round_number= round_number, user_movement =agentField, opponent1_move =team_moves[1], opponent2_move =team_moves[0])
+        model.db.session.add(movement)
+        model.db.session.commit()
+    round_number += 1
+    return jsonify(team_moves[0], team_moves[1])
+
 
 @app.errorhandler(404)
 def page_not_found(e):

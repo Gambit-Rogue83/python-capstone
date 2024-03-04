@@ -4,37 +4,37 @@
 
 <div>
 <h1>Create Session</h1>
-<form action="">
+<form action="/game" method="POST">
     <h1>You are Agent Spider: </h1>
-    <img src="{{ url_for('static', filename='Spider.PNG') }}" alt="">
+    <img src="{{ url_for('static', filename='image/Spider.PNG') }}" alt="" class="character">
     <h2>Select Your Equipment</h2>
 <select name="" id="">
-    <option value="">Stealth Field
-        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
-    </option>
+    <option value="">Stealth Field</option>
     <option value="">Adrenaline Surge</option>
     <option value="">Flash Bang</option>
     <option value="">Smoke Grenade</option>
 </select>
 <select name="" id="">
-    <option value="">Stealth Field
-        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
-    </option>
+    <option value="">Stealth Field </option>
     <option value="">Adrenaline Surge</option>
     <option value="">Flash Bang</option>
     <option value="">Smoke Grenade</option>
 </select>
-<select name="Equipment 1" id="" placeholder="Equipment1">
-    <option value="">Stealth Field
-        <img src="{{ url_for('static', filename='stealth.PNG') }}" alt="">
-    </option>
+<select name="" id="">
+    <option value="">Stealth Field</option>
     <option value="">Adrenaline Surge</option>
     <option value="">Flash Bang</option>
     <option value="">Smoke Grenade</option>
 </select>
+<input type="submit" value="Locked & Loaded">
 </form>
 
-{% for image in images %}
+<img src="{{ url_for('static', filename='image/stealth.PNG') }}" alt="" id="stealth">
+<img src="{{ url_for('static', filename='image/smoke.PNG') }}" alt="" class="equipment">
+<img src="{{ url_for('static', filename='image/flash.PNG') }}" alt="" class="equipment">
+<img src="{{ url_for('static', filename='image/adrenaline.PNG') }}" alt="" class="equipment">
+
+<!-- {% for image in images %}
 <img src="/static/image/{{image}}.PNG" alt="" hidden id="{{image}}">
 {% endfor %}
 <script>
@@ -42,7 +42,7 @@
     const maxFloored = Math.floor(6);
     let die = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
     document.getElementById(die).hidden=false;
-  </script>
+  </script> -->
 
 </div>
 {% endblock %}

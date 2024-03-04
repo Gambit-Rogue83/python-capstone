@@ -1,0 +1,15 @@
+body {
+    background-image: url('/static/image/specter.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: rgb(232, 243, 236);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 150px;
+}

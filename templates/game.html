@@ -6,29 +6,42 @@
     {% for row in game_spaces %}
     <div class="row row-cols-auto">
         {% for space in row %}
-            <button class="button" id="{{ space }}"> o </button>
+            <button class="button {{ space }}" id="{{ space }}">o</button>
         {% endfor %}
     </div>
     {% endfor %}
 </div>
+<input type="hidden" id="selected-button" value="">
 
-<section>
-    Equipment
-    <label for="Stealth Field">Stealth Field</label>
-    <label for="Adrenaline Surge">Adrenaline Surge</label>
-    <label for="Flash Bang">Flash Bang</label>
-    <button> Use </button>
-</section>
+<section> Health Remaining</section>
+<input type="checkbox" id="health1" name="health1" value="health1">
+<input type="checkbox" id="health2" name="health2" value="health2">
+<input type="checkbox" id="health3" name="health3" value="health3">
+<input type="checkbox" id="health4" name="health4" value="health4">
 
-<form action="">
-    <input type="submit">
+<br>
+<label for="">Agent
+    <img src="{{ url_for('static', filename='image/Spider.PNG') }}" alt="">
+</label>
+<br>
+<label for="">Hunter A
+    <img src="{{ url_for('static', filename='image/gun.PNG') }}" alt="">
+</label>
+<br>
+<label for="">Hunter B
+    <img src="{{ url_for('static', filename='image/puppet.PNG') }}" alt="">
+</label>
+
+
+<form action="" class="round">
+   <!-- <h1>Round <h2 class="counter">1</h2> </h1> -->
+        <h3> Location: <h2 class="move"> </h2></h3>
+        <h3> Spotted? </h3> <input type="checkbox" name="spotted" id="spotted">
+        <h4>Use Item</h4> <input type="checkbox" name="Equipment" id="equipment">
+        <h4>Objective Claimed</h4> <input type="checkbox" id="objective">
+        <input type="submit">
 </form>
 
-<!-- <script>
-    function onButtonClick(buttonId) {
-        alert("Button clicked: " + buttonId);
-        // Add logic for character movement here
-    }
-</script> -->
+<script src="/static/game.js"></script>
 
 {% endblock %}
