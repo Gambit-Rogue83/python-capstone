@@ -5,7 +5,7 @@ import model
 import logic
 
 app = Flask(__name__)
-
+app.app_context().push()
 app.config['SECRET_KEY'] = 'IAmIRONMAN'
 
 @app.route('/', methods=['GET', 'POST'])

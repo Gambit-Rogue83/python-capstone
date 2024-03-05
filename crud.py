@@ -1,5 +1,4 @@
 from model import User, db, Game, Move
-from server import app
 from werkzeug.security import check_password_hash
 
 def create_user(email, username, password):
